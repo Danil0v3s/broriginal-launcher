@@ -9,13 +9,27 @@ let mainWindow;
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 800, height: 600 });
+    mainWindow = new BrowserWindow({
+        width: 1024,
+        height: 576,
+        frame: false,
+        resizable: false,
+        movable: true,
+        webPreferences: { nodeIntegration: true }
+    });
 
     // and load the index.html of the app.
-    mainWindow.loadURL('http://localhost:3000');
+    const startUrl = process.env.ELECTRON_START_URL || url.format({
+        pathname: path.join(__dirname, '/../build/index.html'),
+        protocol: 'file:',
+        slashes: true
+    });
+    mainWindow.loadURL(startUrl);
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
+
+    mainWindow.removeMenu();
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
