@@ -2,6 +2,7 @@
   "name": "broriginal-launcher",
   "version": "0.1.0",
   "private": true,
+  "author": "Danilo Menezes",
   "homepage": "./",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -11,15 +12,34 @@
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1"
   },
-  "main": "src/electron-starter.js",
+  "main": "public/electron.js",
   "scripts": {
-    "start": "nf start -p 3000",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "electron-start": "node src/electron-wait-react",
-    "react-start": "react-scripts start"
+    "electron-start": "concurrently \"yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "react-start": "react-scripts start",
+    "postinstall": "electron-builder install-app-deps",
+    "preelectron-pack": "yarn build",
+    "electron-pack": "electron-builder build -w"
+  },
+  "build": {
+    "appId": "yourappid",
+    "productName": "MyApp",
+    "copyright": "Copyright © 2019 ${author}",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/favicon.ico"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -37,7 +57,9 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^5.2.0",
     "electron": "^9.0.1",
-    "foreman": "^3.0.1"
+    "electron-builder": "^22.7.0",
+    "wait-on": "^5.0.0"
   }
 }
