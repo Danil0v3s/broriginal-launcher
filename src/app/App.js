@@ -6,17 +6,50 @@ import LoginForm from './components/loginForm/loginForm'
 import ImageProgress from './components/imageProgress/imageProgress';
 import SettingsButton from './components/settingsButton/settingsButton';
 
-function App() {
-  return (
-    <div className="App">
-      <div className="root">
-        <TitleBar />
-        <LoginForm />
-        <ImageProgress />
-        <SettingsButton />
+const ipcRenderer = window.require('electron').ipcRenderer
+
+export default class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {}
+    ipcRenderer.on('asynchronous-message', this.asynchronousMessageFromMain)
+  }
+
+  asynchronousMessageFromMain = async (event, arg) => {
+    if (!this.unmounted) {
+      this.setState({ ...arg })
+    }
+  }
+
+  componentWillUnmount() {
+    this.unmounted = true
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <div className="root">
+          <TitleBar />
+          <LoginForm downloadStatus={this.state.downloadStatus} />
+          <ImageProgress />
+          <SettingsButton />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
 }
 
-export default App;
+// function App() {
+  // const ipcRendererRef = useRef();
+  // ipcRendererRef.current.invoke('app-loaded', {});
+  // const ipcEventRef = useRef()
+
+  // const [appState, updateAppState] = useState({});
+
+  // console.log(ipcEventRef.current);
+
+
+// }

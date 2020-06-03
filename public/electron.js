@@ -4,11 +4,34 @@ const path = require('path');
 const url = require('url');
 const isDev = require('electron-is-dev');
 const { exec } = require('child_process');
-const executablePath = "\"D:\\Ragnarok\\PROJETO BRORIGINAL\\CLIENTE\\bROriginal - SSO.exe\"";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+
+function manageDownloads(window) {
+    let progress = 0;
+
+    setInterval(function () {
+        progress += 1;
+
+        window.webContents.send('asynchronous-message', {
+            downloadStatus: {
+                loading: true,
+                progress
+            }
+        });
+
+        if (progress > 100) {
+            window.webContents.send('asynchronous-message', {
+                downloadStatus: {
+                    loading: false
+                }
+            });
+            clearInterval(this);
+        }
+    }, 300);
+}
 
 function createWindow() {
     // Create the browser window.
@@ -36,6 +59,10 @@ function createWindow() {
     }
 
     mainWindow.removeMenu();
+    mainWindow.webContents.on('did-finish-load', () => {
+        manageDownloads(mainWindow)        
+    })
+
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
