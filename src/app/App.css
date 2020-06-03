@@ -23,6 +23,7 @@
 .titlebar-btn.minimize {
   position: relative;
 }
+
 .titlebar-btn.minimize>div {
   position: absolute;
   top: -3px;

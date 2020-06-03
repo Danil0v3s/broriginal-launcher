@@ -2,7 +2,9 @@ import React from 'react';
 import './App.css';
 import TitleBar from './components/titleBar/titleBar'
 import LoginForm from './components/loginForm/loginForm'
-import icSettings from './ic-settings.svg'
+
+import ImageProgress from './components/imageProgress/imageProgress';
+import SettingsButton from './components/settingsButton/settingsButton';
 
 function App() {
   return (
@@ -10,9 +12,8 @@ function App() {
       <div className="root">
         <TitleBar />
         <LoginForm />
-        <div style={{ height: 32, width: 32, backgroundColor: '#767676', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5, position: 'absolute', right: 16, bottom: 16 }}>
-          <img src={icSettings} height={20} width={20} />
-        </div>
+        <ImageProgress />
+        <SettingsButton />
       </div>
     </div>
   );
