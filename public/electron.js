@@ -1,7 +1,10 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 
 const path = require('path');
 const url = require('url');
+const isDev = require('electron-is-dev');
+const { exec } = require('child_process');
+const executablePath = "\"D:\\Ragnarok\\PROJETO BRORIGINAL\\CLIENTE\\bROriginal - SSO.exe\"";
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -19,7 +22,8 @@ function createWindow() {
     });
 
     // and load the index.html of the app.
-    const startUrl = process.env.ELECTRON_START_URL || url.format({
+
+    const startUrl = isDev ? 'http://localhost:3000' : url.format({
         pathname: path.join(__dirname, '/../build/index.html'),
         protocol: 'file:',
         slashes: true
@@ -27,7 +31,9 @@ function createWindow() {
     mainWindow.loadURL(startUrl);
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    if (isDev) {
+        mainWindow.webContents.openDevTools();
+    }
 
     mainWindow.removeMenu();
 
@@ -61,6 +67,14 @@ app.on('activate', function () {
         createWindow()
     }
 });
+
+ipcMain.handle('login', async (event, ...args) => {
+    const params = `"-t:${args[0]} ${args[1]} server -1rag1"`
+    exec(`start "" "bROriginal - SSO.exe" ${params}`, { cwd: 'D:\\Ragnarok\\PROJETO BRORIGINAL\\CLIENTE' }, (err, stdout, stderr) => {
+        console.log(err, stdout, stderr);
+    });
+    return true
+})
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

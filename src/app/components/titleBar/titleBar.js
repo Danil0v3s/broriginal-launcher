@@ -2,8 +2,6 @@ import React from 'react';
 import icClose from './ic-close.svg';
 
 const electron = window.require('electron');
-const fs = electron.remote.require('fs');
-const ipcRenderer  = electron.ipcRenderer;
 
 const minimize = (event) => {
   var window = electron.remote.getCurrentWindow();
