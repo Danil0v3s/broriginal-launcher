@@ -44,12 +44,14 @@ async function manageDownloads(window) {
 
     for (const file of availableFiles) {
         const dirname = path.dirname(file);
-        if (!existsSync(path.join(__dirname, dirname))) {
-            mkdirSync(path.join(__dirname, dirname), { recursive: true });
+        const filename = path.basename(file)
+        const downloadPath = path.join(__dirname, '../../', dirname)
+        if (!existsSync(downloadPath)) {
+            mkdirSync(downloadPath, { recursive: true });
         }
 
         const file_url = 'http://localhost:8080/' + file;
-        const out = createWriteStream(path.join(__dirname, file));
+        const out = createWriteStream(path.join(downloadPath, filename));
 
         const req = defaultReq({
             method: 'GET',
