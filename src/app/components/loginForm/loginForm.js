@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from '../input/input'
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
@@ -14,6 +14,7 @@ const doLogin = async ({ username, password }) => {
 }
 
 export default function LoginForm({ downloadStatus }) {
+    // console.log(downloadStatus && downloadStatus.progress)
     const [userInfo, setUserInfo] = useState({ username: '', password: '' });
 
     const renderLoginButton = () => {

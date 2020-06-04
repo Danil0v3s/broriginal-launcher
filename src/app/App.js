@@ -18,13 +18,19 @@ export default class App extends React.Component {
   }
 
   asynchronousMessageFromMain = async (event, arg) => {
-    if (!this.unmounted) {
+    if (!this.unmounted && this.mounted) {
       this.setState({ ...arg })
     }
   }
 
   componentWillUnmount() {
     this.unmounted = true
+    this.mounted = false
+  }
+
+  componentDidMount() {
+    this.unmounted = false
+    this.mounted = true
   }
 
   render() {

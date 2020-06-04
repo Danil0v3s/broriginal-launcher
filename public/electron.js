@@ -1,36 +1,95 @@
+Promise = require('bluebird');
 const { app, BrowserWindow, ipcMain } = require('electron');
 
 const path = require('path');
 const url = require('url');
 const isDev = require('electron-is-dev');
+const defaultReq = require('request');
+const util = require('util');
+const request = util.promisify(defaultReq);
 const { exec } = require('child_process');
+const { createWriteStream, existsSync, mkdirSync } = require('fs');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
+// .\GrfCL.exe -log false -merge "C:\\Users\\PC\\AppData\\Roaming\\GRF Editor\\Encryption\\rdata.grf" "C:\\Users\\PC\\AppData\\Roaming\\GRF Editor\\Encryption\\new.grf"
 let mainWindow;
 
-function manageDownloads(window) {
-    let progress = 0;
+function bytesToSize(bytes) {
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes == 0) return '0 Byte';
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+}
 
-    setInterval(function () {
-        progress += 1;
+async function findDownloadSize(url) {
+    let res = await request({
+        method: 'HEAD',
+        uri: url
+    });
 
-        window.webContents.send('asynchronous-message', {
-            downloadStatus: {
-                loading: true,
-                progress
-            }
+    return Number(res.toJSON().headers['content-length']);
+}
+
+async function manageDownloads(window) {
+    const response = await request({ method: 'GET', uri: 'http://localhost:8080/updates.json', headers: { contentType: 'application/json' } })
+    const availableFiles = JSON.parse(response.toJSON().body);
+    let downloadTotalSize = 0
+    let downloadedSize = 0
+    let progress = 0
+
+    for (const file of availableFiles) {
+        downloadTotalSize += await findDownloadSize('http://localhost:8080/' + file);
+    }
+
+    for (const file of availableFiles) {
+        const dirname = path.dirname(file);
+        if (!existsSync(path.join(__dirname, dirname))) {
+            mkdirSync(path.join(__dirname, dirname), { recursive: true });
+        }
+
+        const file_url = 'http://localhost:8080/' + file;
+        const out = createWriteStream(path.join(__dirname, file));
+
+        const req = defaultReq({
+            method: 'GET',
+            uri: file_url
         });
 
-        if (progress > 100) {
-            window.webContents.send('asynchronous-message', {
-                downloadStatus: {
-                    loading: false
-                }
-            });
-            clearInterval(this);
-        }
-    }, 300);
+        req.pipe(out);
+
+        req.on('data', function (chunk) {
+            downloadedSize += chunk.length;
+            let currentProgress = Number((100.0 * downloadedSize / downloadTotalSize).toFixed(0))
+
+            if (currentProgress > progress || currentProgress + 1 >= 100) {
+                progress = currentProgress
+                setTimeout(() => {
+                    window.webContents.send('asynchronous-message', {
+                        downloadStatus: {
+                            loading: true,
+                            progress
+                        }
+                    })
+                }, 200)
+            }
+
+        });
+
+        req.on('end', function () {
+            //Do something
+        });
+
+        req.on('response', function (data) {
+            if (progress => 100) {
+                window.webContents.send('asynchronous-message', {
+                    downloadStatus: {
+                        loading: false
+                    }
+                })
+            }
+        });
+    }
 }
 
 function createWindow() {
@@ -59,10 +118,9 @@ function createWindow() {
     }
 
     mainWindow.removeMenu();
-    mainWindow.webContents.on('did-finish-load', () => {
-        manageDownloads(mainWindow)        
+    mainWindow.webContents.once('did-finish-load', () => {
+        manageDownloads(mainWindow)
     })
-
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
@@ -97,7 +155,7 @@ app.on('activate', function () {
 
 ipcMain.handle('login', async (event, ...args) => {
     const params = `"-t:${args[0]} ${args[1]} server -1rag1"`
-    exec(`start "" "bROriginal - SSO.exe" ${params}`, { cwd: 'D:\\Ragnarok\\PROJETO BRORIGINAL\\CLIENTE' }, (err, stdout, stderr) => {
+    exec(`start "" "bROriginal - SSO.exe" ${params}`, { cwd: path.join(__dirname, 'CLIENTE') }, (err, stdout, stderr) => {
         console.log(err, stdout, stderr);
     });
     return true
