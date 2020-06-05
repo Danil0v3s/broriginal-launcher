@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Input from '../input/input'
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
@@ -6,28 +6,52 @@ import "react-sweet-progress/lib/style.css";
 import icNext from './ic-next.svg'
 import logo from './logo.png'
 
-const ipcRenderer = window.require('electron').ipcRenderer;
+const ipcRenderer = window.require('electron').ipcRenderer
 
-const doLogin = async ({ username, password }) => {
-    const result = await ipcRenderer.invoke('login', password, username)
-    console.log(result)
-}
+export default class LoginForm extends React.Component {
 
-export default function LoginForm({ downloadStatus }) {
-    // console.log(downloadStatus && downloadStatus.progress)
-    const [userInfo, setUserInfo] = useState({ username: '', password: '' });
+    constructor(props) {
+        super(props);
 
-    const renderLoginButton = () => {
+        this.state = {
+            userInfo: { username: '', password: '' }
+        }
+        ipcRenderer.on('download-progress', this.asynchronousMessageFromMain)
+    }
+
+    asynchronousMessageFromMain = async (event, arg) => {
+        if (!this.unmounted && this.mounted) {
+            this.setState({ ...arg })
+        }
+    }
+
+    componentWillUnmount() {
+        this.unmounted = true
+        this.mounted = false
+    }
+
+    componentDidMount() {
+        this.unmounted = false
+        this.mounted = true
+    }
+
+    doLogin = async ({ username, password }) => {
+        await ipcRenderer.invoke('login', password, username);
+    }
+
+    renderLoginButton = () => {
+        const { userInfo } = this.state;
         return (
             <div className="login-button"
                 style={{ height: 56, width: 56, backgroundColor: '#bf2626', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '30%' }}
-                onClick={() => doLogin(userInfo)}>
+                onClick={() => this.doLogin(userInfo)}>
                 <img className="login-button-img" src={icNext} height={24} />
             </div>
         )
     }
 
-    const renderButton = () => {
+    renderButton = () => {
+        const { downloadStatus } = this.state;
         if (downloadStatus && downloadStatus.loading && downloadStatus.progress) {
             return <Progress
                 type="circle"
@@ -36,28 +60,31 @@ export default function LoginForm({ downloadStatus }) {
                 width={56}
                 strokeWidth={4} />
         } else {
-            return renderLoginButton()
+            return this.renderLoginButton()
         }
     }
 
-    return (
-        <div className="login-form" style={{ paddingTop: 30 }}>
-            <img src={logo} width={100} style={{ marginLeft: 16, marginBottom: 30 }} />
-            <h2>Sign in with your bROriginal account</h2>
-            <Input label="username" type="text" value={userInfo.username} onChange={(event) => setUserInfo({ ...userInfo, username: event.target.value })} />
-            <Input label="password" type="password" value={userInfo.password} onChange={(event) => setUserInfo({ ...userInfo, password: event.target.value })} />
+    render() {
+        const { userInfo } = this.state;
+        return (
+            <div className="login-form" style={{ paddingTop: 30 }}>
+                <img src={logo} width={100} style={{ marginLeft: 16, marginBottom: 30 }} />
+                <h2>Sign in with your bROriginal account</h2>
+                <Input id="username" label="username" type="text" value={userInfo.username} onChange={(event) => this.setState({ userInfo: { ...userInfo, username: event.target.value } })} />
+                <Input id="password" label="password" type="password" value={userInfo.password} onChange={(event) => this.setState({ userInfo: { ...userInfo, password: event.target.value } })} />
 
-            <div style={{ marginTop: 32, width: '100%', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
-                {renderButton()}
-            </div>
+                <div style={{ marginTop: 32, width: '100%', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
+                    {this.renderButton()}
+                </div>
 
-            <div className="login-form-help">
-                <ul>
-                    <li>Cadastre-se</li>
-                    <li>Esqueceu a senha?</li>
-                </ul>
+                <div className="login-form-help">
+                    <ul>
+                        <li>Cadastre-se</li>
+                        <li>Esqueceu a senha?</li>
+                    </ul>
+                </div>
+            </div >
+        )
+    }
 
-            </div>
-        </div >
-    )
 }

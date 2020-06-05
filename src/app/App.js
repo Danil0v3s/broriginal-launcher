@@ -47,15 +47,3 @@ export default class App extends React.Component {
   }
 
 }
-
-// function App() {
-  // const ipcRendererRef = useRef();
-  // ipcRendererRef.current.invoke('app-loaded', {});
-  // const ipcEventRef = useRef()
-
-  // const [appState, updateAppState] = useState({});
-
-  // console.log(ipcEventRef.current);
-
-
-// }

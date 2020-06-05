@@ -66,25 +66,16 @@ async function manageDownloads(window) {
 
             if (currentProgress > progress || currentProgress + 1 >= 100) {
                 progress = currentProgress
-                setTimeout(() => {
-                    window.webContents.send('asynchronous-message', {
-                        downloadStatus: {
-                            loading: true,
-                            progress
-                        }
-                    })
-                }, 200)
+                window.webContents.send('download-progress', {
+                    downloadStatus: {
+                        loading: true,
+                        progress
+                    }
+                })
             }
 
-        });
-
-        req.on('end', function () {
-            //Do something
-        });
-
-        req.on('response', function (data) {
-            if (progress => 100) {
-                window.webContents.send('asynchronous-message', {
+            if (progress >= 100) {
+                window.webContents.send('download-progress', {
                     downloadStatus: {
                         loading: false
                     }
@@ -157,7 +148,7 @@ app.on('activate', function () {
 
 ipcMain.handle('login', async (event, ...args) => {
     const params = `"-t:${args[0]} ${args[1]} server -1rag1"`
-    exec(`start "" "bROriginal - SSO.exe" ${params}`, { cwd: path.join(__dirname, 'CLIENTE') }, (err, stdout, stderr) => {
+    exec(`start "" "bROriginal - SSO.exe" ${params}`, { cwd: path.join(__dirname, '../../', 'CLIENTE') }, (err, stdout, stderr) => {
         console.log(err, stdout, stderr);
     });
     return true
