@@ -4,6 +4,7 @@ import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
 
 import icNext from './ic-next.svg'
+import icNextGray from './ic-next-gray.svg'
 import logo from './logo.png'
 
 const ipcRenderer = window.require('electron').ipcRenderer
@@ -16,6 +17,7 @@ export default class LoginForm extends React.Component {
         this.state = {
             userInfo: { username: '', password: '' }
         }
+        
         ipcRenderer.on('download-progress', this.asynchronousMessageFromMain)
     }
 
@@ -39,13 +41,16 @@ export default class LoginForm extends React.Component {
         await ipcRenderer.invoke('login', password, username);
     }
 
+    isUserInfoValid = () => {
+        return this.state.userInfo.username.length >= 4 && this.state.userInfo.password.length >= 4;
+    }
+
     renderLoginButton = () => {
         const { userInfo } = this.state;
         return (
-            <div className="login-button"
-                style={{ height: 56, width: 56, backgroundColor: '#bf2626', display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: '30%' }}
-                onClick={() => this.doLogin(userInfo)}>
-                <img className="login-button-img" src={icNext} height={24} />
+            <div className={`login-button ${this.isUserInfoValid() ? 'enabled' : 'disabled'}`}
+                onClick={(event) => this.isUserInfoValid() ? this.doLogin(userInfo) : event.preventDefault()}>
+                <img className="login-button-img" src={this.isUserInfoValid() ? icNext : icNextGray} height={24} />
             </div>
         )
     }
@@ -86,5 +91,4 @@ export default class LoginForm extends React.Component {
             </div >
         )
     }
-
 }

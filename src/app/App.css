@@ -181,3 +181,25 @@ textarea, input {
   color: #a2a0a3;
   font-size: 1.0em;
 }
+
+.login-button.enabled {
+  height: 56px;
+  width: 56px;
+  background-color: #bf2626;
+  border: 2px solid #bf2626;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30%
+}
+
+.login-button.disabled {
+  height: 56px;
+  width: 56px;
+  background-color: transparent;
+  display: flex;
+  border: 2px solid gray;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30%
+}
