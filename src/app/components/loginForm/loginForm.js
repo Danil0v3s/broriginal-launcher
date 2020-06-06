@@ -14,10 +14,8 @@ export default class LoginForm extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            userInfo: { username: '', password: '' }
-        }
-        
+        this.state = {}
+
         ipcRenderer.on('download-progress', this.asynchronousMessageFromMain)
     }
 
@@ -38,15 +36,18 @@ export default class LoginForm extends React.Component {
     }
 
     doLogin = async ({ username, password }) => {
-        await ipcRenderer.invoke('login', password, username);
+        // await ipcRenderer.invoke('login', password, username);
+        if (this.props.userInfo && this.props.userInfo.login) {
+            this.props.userInfo.login()
+        }
     }
 
     isUserInfoValid = () => {
-        return this.state.userInfo.username.length >= 4 && this.state.userInfo.password.length >= 4;
+        return this.props.userInfo.username.length >= 4 && this.props.userInfo.password.length >= 4;
     }
 
     renderLoginButton = () => {
-        const { userInfo } = this.state;
+        const { userInfo } = this.props;
         return (
             <div className={`login-button ${this.isUserInfoValid() ? 'enabled' : 'disabled'}`}
                 onClick={(event) => this.isUserInfoValid() ? this.doLogin(userInfo) : event.preventDefault()}>
@@ -70,13 +71,13 @@ export default class LoginForm extends React.Component {
     }
 
     render() {
-        const { userInfo } = this.state;
+        const { userInfo, setUserInfo } = this.props;
         return (
             <div className="login-form" style={{ paddingTop: 30 }}>
                 <img src={logo} width={100} style={{ marginLeft: 16, marginBottom: 30 }} />
                 <h2>Sign in with your bROriginal account</h2>
-                <Input id="username" label="username" type="text" value={userInfo.username} onChange={(event) => this.setState({ userInfo: { ...userInfo, username: event.target.value } })} />
-                <Input id="password" label="password" type="password" value={userInfo.password} onChange={(event) => this.setState({ userInfo: { ...userInfo, password: event.target.value } })} />
+                <Input id="username" label="username" type="text" value={userInfo.username} onChange={(event) => setUserInfo({ userInfo: { ...userInfo, username: event.target.value } })} />
+                <Input id="password" label="password" type="password" value={userInfo.password} onChange={(event) => setUserInfo({ userInfo: { ...userInfo, password: event.target.value } })} />
 
                 <div style={{ marginTop: 32, width: '100%', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
                     {this.renderButton()}

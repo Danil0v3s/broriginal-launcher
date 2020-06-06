@@ -1,10 +1,15 @@
 import React from 'react';
 import './App.css';
-import TitleBar from './components/titleBar/titleBar'
-import LoginForm from './components/loginForm/loginForm'
+import TitleBar from './components/titleBar/titleBar';
+import LoginPage from './pages/LoginPage';
 
-import ImageProgress from './components/imageProgress/imageProgress';
-import SettingsButton from './components/settingsButton/settingsButton';
+import {
+  Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+import history from './components/History';
+import MainPage from './pages/MainPage/MainPage';
 
 const ipcRenderer = window.require('electron').ipcRenderer
 
@@ -13,7 +18,9 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {}
+    this.state = {
+      userInfo: { username: '', password: '', isAuthenticated: false, login: this.login, logout: this.logout }
+    }
     ipcRenderer.on('asynchronous-message', this.asynchronousMessageFromMain)
   }
 
@@ -33,15 +40,39 @@ export default class App extends React.Component {
     this.mounted = true
   }
 
+  setUserInfo = (userInfo) => {
+    this.setState({ ...userInfo });
+  }
+
+  login = () => {
+    const { userInfo } = this.state;
+    if (userInfo.username.length >= 4 && userInfo.password.length >= 4 && !userInfo.isAuthenticated) {
+      this.setState({ userInfo: { ...userInfo, isAuthenticated: true } })
+      history.push('/')
+    }
+  }
+
+  logout = () => {
+    const { userInfo } = this.state;
+    if (userInfo.isAuthenticated) {
+      this.setState({ userInfo: { ...userInfo, isAuthenticated: false } })
+    }
+  }
+
   render() {
     return (
-      <div className="App">
-        <div className="root">
+      <div className="root">
+        <Router history={history}>
           <TitleBar />
-          <LoginForm downloadStatus={this.state.downloadStatus} />
-          <ImageProgress />
-          <SettingsButton />
-        </div>
+          <Switch>
+            {/* <Route path="/login">
+              <LoginPage setUserInfo={this.setUserInfo} userInfo={this.state.userInfo} />
+            </Route> */}
+            <Route path="/" userInfo={this.state.userInfo}>
+              <MainPage />
+            </Route>
+          </Switch>
+        </Router>
       </div>
     );
   }

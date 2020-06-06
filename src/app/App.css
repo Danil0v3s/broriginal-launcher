@@ -26,7 +26,7 @@
 
 .titlebar-btn.minimize>div {
   position: absolute;
-  top: -3px;
+  top: 3px;
 }
 
 .titlebar-btn.minimize:hover {
@@ -59,9 +59,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: row;
-  /* align-items: center;
-  justify-content: center; */
-  font-size: calc(10px + 2vmin);
   color: white;
 }
 
@@ -76,6 +73,11 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+.page-container {
+  display: flex;
+  width: 100%;
 }
 
 .login-form {
@@ -157,7 +159,7 @@ textarea, input {
   position: absolute;
   pointer-events: none;
   font-weight: bold;
-  bottom: 1.3em;
+  bottom: 1.5em;
   left: 0.7em;
   color: gray;
   font-size: 12px;
@@ -167,8 +169,8 @@ textarea, input {
 
 .floating-label input:focus+label, .floating-label input:active+label, .floating-label input:valid+label {
   pointer-events: auto;
-  margin-bottom: 1.5em;
-  font-size: 0.45em;
+  margin-bottom: 2.3em;
+  font-size: 0.48em;
 }
 
 .floating-label input:focus+label, .floating-label input:active+label {
@@ -202,4 +204,23 @@ textarea, input {
   justify-content: center;
   align-items: center;
   border-radius: 30%
+}
+
+.main-nav-bar {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #c0c0c0;
+}
+
+.main-nav-bar.menu {
+  display: flex;
+  margin-right: 120px;
+}
+
+.main-nav-bar.menu .icon-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
 }
