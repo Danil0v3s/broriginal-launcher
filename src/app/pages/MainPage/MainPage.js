@@ -6,6 +6,7 @@ import icMessages from './ic-messages.svg';
 import icSettings from './ic-settings.svg';
 import icStore from './ic-store.svg';
 import icHome from './ic-home.svg';
+import bg from './bg.jpg';
 
 export default class MainPage extends React.Component {
 
@@ -16,7 +17,8 @@ export default class MainPage extends React.Component {
 
     render() {
         return (
-            <div className="page-container" style={{ backgroundColor: 'red', flexDirection: 'column' }}>
+            <div className="page-container" style={{ backgroundColor: 'red', flexDirection: 'column', backgroundImage: `url(${bg})`, backgroundSize: 'cover' }}>
+                <div class="layer" />
                 <div className="main-nav-bar">
                     <div style={{ display: 'flex', justifyContent: 'center', padding: 8, alignItems: 'center', marginLeft: 8 }}>
                         <img src={NYANGPORING} height={32} />
@@ -40,6 +42,7 @@ export default class MainPage extends React.Component {
                         </div>
                     </div>
                 </div>
+                
             </div>
         )
     }

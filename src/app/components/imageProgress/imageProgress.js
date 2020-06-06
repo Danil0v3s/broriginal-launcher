@@ -4,7 +4,6 @@ import backgroundImage from './bg.jpg'
 const style = {
     display: 'flex',
     width: '70%',
-    backgroundColor: 'red',
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: 'cover',
     alignItems: 'flex-end',
