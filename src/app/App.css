@@ -38,10 +38,16 @@
   background-color: red;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Fredoka+One&display=swap');
 body {
   /* just to make it feel a little more at home */
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Fredoka One', sans-serif;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .App-logo {
@@ -211,7 +217,7 @@ textarea, input {
   height: 60px;
   display: flex;
   justify-content: space-between;
-  background-color: rgba(162, 160, 163, 0.7);
+  border-bottom: 1px solid white;
   z-index: 1;
 }
 
@@ -230,16 +236,30 @@ textarea, input {
 }
 
 .ic:hover {
-  -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
-  filter: drop-shadow( 2px 2px 5px rgba(0, 0, 0, .7));
+  -webkit-filter: drop-shadow( 3px 3px 2px rgba(255, 255, 255, .7));
+  filter: drop-shadow( 2px 2px 5px rgba(255, 255, 255, .7));
 }
 
 .layer {
-  background-color: rgba(162, 160, 163, 0.6);
+  background-color: rgba(255, 255, 255, 0.45);
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
+}
+
+.backdrop {
+  height: 120px;
+  width: 100%;
+  position: absolute;
+  background: rgba(76,76,76,0.5);
+  background: -moz-linear-gradient(top, rgba(76,76,76,0.5) 0%, rgba(19,19,19,0) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(76,76,76,0.5)), color-stop(100%, rgba(19,19,19,0)));
+  background: -webkit-linear-gradient(top, rgba(76,76,76,0.5) 0%, rgba(19,19,19,0) 100%);
+  background: -o-linear-gradient(top, rgba(76,76,76,0.5) 0%, rgba(19,19,19,0) 100%);
+  background: -ms-linear-gradient(top, rgba(76,76,76,0.5) 0%, rgba(19,19,19,0) 100%);
+  background: linear-gradient(to bottom, rgba(76,76,76,0.5) 0%, rgba(19,19,19,0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313', GradientType=0 );  
 }
