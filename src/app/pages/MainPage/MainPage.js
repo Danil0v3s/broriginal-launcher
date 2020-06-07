@@ -26,23 +26,23 @@ export default class MainPage extends React.Component {
                     </div>
                     <div className="main-nav-bar menu">
                         <div className="icon-btn">
-                            <img src={icHome} width={24} />
+                            <img src={icHome} width={24} className="icon-btn ic" />
                         </div>
                         <div className="icon-btn">
-                            <img src={icAccount} width={24} />
+                            <img src={icAccount} width={24} className="icon-btn ic" />
                         </div>
                         <div className="icon-btn">
-                            <img src={icStore} width={24} />
+                            <img src={icStore} width={24} className="icon-btn ic" />
                         </div>
                         <div className="icon-btn">
-                            <img src={icMessages} width={24} />
+                            <img src={icMessages} width={24} className="icon-btn ic" />
                         </div>
                         <div className="icon-btn">
-                            <img src={icSettings} width={24} />
+                            <img src={icSettings} width={24} className="icon-btn ic" />
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         )
     }
