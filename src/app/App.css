@@ -263,3 +263,8 @@ textarea, input {
   background: linear-gradient(to bottom, rgba(76,76,76,0.5) 0%, rgba(19,19,19,0) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313', GradientType=0 );  
 }
+
+.main-content {
+  height: 515px;
+  background-color: rgba(111, 215, 247, 0.253);
+}

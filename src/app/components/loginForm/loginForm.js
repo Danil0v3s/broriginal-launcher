@@ -2,6 +2,7 @@ import React from 'react';
 import Input from '../input/input'
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
+import { login as actionLogin } from '../../actions/AccountActions';
 
 import icNext from './ic-next.svg'
 import icNextGray from './ic-next-gray.svg'
@@ -35,10 +36,14 @@ export default class LoginForm extends React.Component {
         this.mounted = true
     }
 
-    doLogin = async ({ username, password }) => {
-        // await ipcRenderer.invoke('login', password, username);
-        if (this.props.userInfo && this.props.userInfo.login) {
-            this.props.userInfo.login()
+    doLogin = async ({ username, password, isAuthenticated }) => {
+        if (username.length >= 4 && password.length >= 4 && !isAuthenticated) {
+            this.setState({ error: undefined })
+            actionLogin(username, password).then(res => {
+                this.props.setUserInfo({ ...this.props.userInfo, isAuthenticated: true, token: res.token })
+            }).catch(ex => {
+                this.setState({ error: ex.message })
+            });
         }
     }
 
@@ -76,10 +81,13 @@ export default class LoginForm extends React.Component {
             <div className="login-form" style={{ paddingTop: 30 }}>
                 <img src={logo} width={100} style={{ marginLeft: 16, marginBottom: 30 }} />
                 <h2>Sign in with your bROriginal account</h2>
-                <Input id="username" label="username" type="text" value={userInfo.username} onChange={(event) => setUserInfo({ userInfo: { ...userInfo, username: event.target.value } })} />
-                <Input id="password" label="password" type="password" value={userInfo.password} onChange={(event) => setUserInfo({ userInfo: { ...userInfo, password: event.target.value } })} />
+                <Input id="username" label="username" type="text" value={userInfo.username} onChange={(event) => setUserInfo({ ...userInfo, username: event.target.value })} />
+                <Input id="password" label="password" type="password" value={userInfo.password} onChange={(event) => setUserInfo({ ...userInfo, password: event.target.value })} />
+                {
+                    this.state.error && <p style={{ color: 'red', marginLeft: 30, marginTop: 0, marginBottom: 0, fontSize: 14 }}>{this.state.error}</p>
+                }
 
-                <div style={{ marginTop: 32, width: '100%', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
+                <div style={{ marginTop: this.state.error ? 15 : 32, width: '100%', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
                     {this.renderButton()}
                 </div>
 

@@ -2,12 +2,7 @@ import React from 'react';
 import './App.css';
 import TitleBar from './components/titleBar/titleBar';
 import LoginPage from './pages/LoginPage';
-
-import {
-  Router,
-  Switch,
-  Route,
-} from "react-router-dom";
+import { Router, Switch, Route, Redirect } from "react-router-dom";
 import history from './components/History';
 import MainPage from './pages/MainPage/MainPage';
 
@@ -19,7 +14,7 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      userInfo: { username: '', password: '', isAuthenticated: false, login: this.login, logout: this.logout }
+      userInfo: { username: '', password: '', isAuthenticated: false }
     }
     ipcRenderer.on('asynchronous-message', this.asynchronousMessageFromMain)
   }
@@ -40,22 +35,16 @@ export default class App extends React.Component {
     this.mounted = true
   }
 
+  isLoggedIn() {
+    return this.state.userInfo.isAuthenticated && this.state.userInfo.token !== undefined
+  }
+
   setUserInfo = (userInfo) => {
-    this.setState({ ...userInfo });
-  }
-
-  login = () => {
-    const { userInfo } = this.state;
-    if (userInfo.username.length >= 4 && userInfo.password.length >= 4 && !userInfo.isAuthenticated) {
-      this.setState({ userInfo: { ...userInfo, isAuthenticated: true } })
-      history.push('/')
-    }
-  }
-
-  logout = () => {
-    const { userInfo } = this.state;
-    if (userInfo.isAuthenticated) {
-      this.setState({ userInfo: { ...userInfo, isAuthenticated: false } })
+    this.setState({ userInfo });
+    if (this.isLoggedIn()) {
+      history.replace('/')
+    } else {
+      history.replace('/login')
     }
   }
 
@@ -65,11 +54,11 @@ export default class App extends React.Component {
         <Router history={history}>
           <TitleBar />
           <Switch>
-            {/* <Route path="/login">
+            <Route path="/login">
               <LoginPage setUserInfo={this.setUserInfo} userInfo={this.state.userInfo} />
-            </Route> */}
-            <Route path="/" userInfo={this.state.userInfo}>
-              <MainPage />
+            </Route>
+            <Route path="/">
+              <MainPage userInfo={this.state.userInfo} />
             </Route>
           </Switch>
         </Router>
