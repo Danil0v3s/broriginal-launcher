@@ -38,16 +38,17 @@
   background-color: red;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Fredoka+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Fredoka+One&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
 body {
   /* just to make it feel a little more at home */
-  font-family: 'Fredoka One', sans-serif;
+  font-family: 'Poppins', sans-serif;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  color: #282c34;
 }
 
 .App-logo {
@@ -266,7 +267,9 @@ textarea, input {
 
 .main-content {
   height: 515px;
-  background-color: rgba(111, 215, 247, 0.253);
+  color: #000;
+  z-index: 2;
+  /* background-color: rgba(111, 215, 247, 0.253); */
 }
 
 .pure-material-progress-circular {

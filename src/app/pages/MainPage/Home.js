@@ -28,7 +28,9 @@ export default class Home extends React.Component {
         }
 
         return (
-            <p>Welcome back, {accountInfo.userid}</p>
+            <div style={{ display: 'flex', direction: 'column', height: '100%', width: '100%', padding: 16, boxSizing: 'border-box' }}>
+                <p>Welcome back, {accountInfo.userid}</p>
+            </div>
         )
 
     }

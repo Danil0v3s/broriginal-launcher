@@ -18,7 +18,7 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      userInfo: { username: '', password: '', isAuthenticated: false }
+      userInfo: { username: 'admin1', password: 'admin1', isAuthenticated: false }
     }
     ipcRenderer.on('asynchronous-message', this.asynchronousMessageFromMain)
   }

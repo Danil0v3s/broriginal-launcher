@@ -11,6 +11,7 @@ import icNews from './imgs/ic-news.svg';
 import bg from './imgs/bg.jpg';
 
 import Home from './Home';
+import Chars from './Chars';
 
 const NavIconButton = ({ img, path }) => {
     return (
@@ -43,7 +44,7 @@ export default class MainPage extends React.Component {
                     <div className="main-nav-bar">
                         <div style={{ display: 'flex', justifyContent: 'center', padding: 8, alignItems: 'center', marginLeft: 8 }}>
                             <img src={NYANGPORING} height={32} />
-                            <p style={{ marginLeft: 8, fontWeight: 100, fontSize: 20 }}>JOGAR</p>
+                            <p style={{ marginLeft: 8, fontWeight: 100, fontSize: 20, fontFamily: 'Fredoka One' }}>JOGAR</p>
                         </div>
                         <div className="main-nav-bar menu">
                             <NavIconButton img={icHome} path="/main/home" />
@@ -65,7 +66,7 @@ export default class MainPage extends React.Component {
                                 <p>STORE</p>
                             </Route>
                             <Route path="/main/account">
-                                <p>ACCOUNT</p>
+                                <Chars />
                             </Route>
                             <Route path="/main/settings">
                                 <p>SETTINGS</p>
