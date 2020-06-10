@@ -5,6 +5,10 @@ import LoginPage from './pages/LoginPage';
 import { Router, Switch, Route } from "react-router-dom";
 import history from './components/History';
 import MainPage from './pages/MainPage/MainPage';
+import axios from 'axios';
+
+axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? process.env.API_URL : 'http://localhost:3001/api/';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const ipcRenderer = window.require('electron').ipcRenderer
 
@@ -41,6 +45,9 @@ export default class App extends React.Component {
 
   setUserInfo = (userInfo) => {
     this.setState({ userInfo });
+    if (userInfo.token) {
+      axios.defaults.headers.common['Authorization'] = userInfo.token;
+    }
     if (this.isLoggedIn()) {
       history.replace('/main/home')
     } else {

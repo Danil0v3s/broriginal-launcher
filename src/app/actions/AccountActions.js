@@ -1,4 +1,3 @@
-import history from '../components/History';
 import axios from 'axios';
 
 export const login = async (username, password) => {
