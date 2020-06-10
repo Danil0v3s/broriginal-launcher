@@ -10,6 +10,8 @@ import icHome from './imgs/ic-home.svg';
 import icNews from './imgs/ic-news.svg';
 import bg from './imgs/bg.jpg';
 
+import Home from './Home';
+
 const NavIconButton = ({ img, path }) => {
     return (
         <Link to={path}>
@@ -44,28 +46,28 @@ export default class MainPage extends React.Component {
                             <p style={{ marginLeft: 8, fontWeight: 100, fontSize: 20 }}>JOGAR</p>
                         </div>
                         <div className="main-nav-bar menu">
-                            <NavIconButton img={icHome} path="/home" />
-                            <NavIconButton img={icNews} path="/news" />
-                            <NavIconButton img={icStore} path="/store" />
-                            <NavIconButton img={icAccount} path="/account" />
-                            <NavIconButton img={icSettings} path="/settings" />
+                            <NavIconButton img={icHome} path="/main/home" />
+                            <NavIconButton img={icNews} path="/main/news" />
+                            <NavIconButton img={icStore} path="/main/store" />
+                            <NavIconButton img={icAccount} path="/main/account" />
+                            <NavIconButton img={icSettings} path="/main/settings" />
                         </div>
                     </div>
                     <div className="main-content">
                         <Switch>
-                            <Route path="/home">
-                                <p>HOME</p>
+                            <Route path="/main/home">
+                                <Home />
                             </Route>
-                            <Route path="/news">
+                            <Route path="/main/news">
                                 <p>NEWS</p>
                             </Route>
-                            <Route path="/store">
+                            <Route path="/main/store">
                                 <p>STORE</p>
                             </Route>
-                            <Route path="/account">
+                            <Route path="/main/account">
                                 <p>ACCOUNT</p>
                             </Route>
-                            <Route path="/settings">
+                            <Route path="/main/settings">
                                 <p>SETTINGS</p>
                             </Route>
                         </Switch>

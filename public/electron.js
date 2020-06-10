@@ -115,6 +115,10 @@ function createWindow() {
         manageDownloads(mainWindow)
     })
 
+    mainWindow.webContents.on('will-navigate', (event, url) => {
+        console.log('will-navigate', url)
+    })
+
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
         // Dereference the window object, usually you would store windows

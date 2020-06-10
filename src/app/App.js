@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import TitleBar from './components/titleBar/titleBar';
 import LoginPage from './pages/LoginPage';
-import { Router, Switch, Route, Redirect } from "react-router-dom";
+import { Router, Switch, Route } from "react-router-dom";
 import history from './components/History';
 import MainPage from './pages/MainPage/MainPage';
 
@@ -42,7 +42,7 @@ export default class App extends React.Component {
   setUserInfo = (userInfo) => {
     this.setState({ userInfo });
     if (this.isLoggedIn()) {
-      history.replace('/')
+      history.replace('/main/home')
     } else {
       history.replace('/login')
     }
@@ -54,11 +54,16 @@ export default class App extends React.Component {
         <Router history={history}>
           <TitleBar />
           <Switch>
+            <Route exact path="/">
+              {
+                this.isLoggedIn() ? history.replace('/main/home') : history.replace('/login')
+              }
+            </Route>
+            <Route path="/main">
+              <MainPage userInfo={this.state.userInfo} />
+            </Route>
             <Route path="/login">
               <LoginPage setUserInfo={this.setUserInfo} userInfo={this.state.userInfo} />
-            </Route>
-            <Route path="/">
-              <MainPage userInfo={this.state.userInfo} />
             </Route>
           </Switch>
         </Router>
