@@ -146,6 +146,11 @@ textarea, input {
   margin-right: 30px;
 }
 
+.floating-label.secondary {
+  position: relative;
+  margin: 0;
+}
+
 .floating-label input {
   border: none;
   border: 2px solid #ededed;
@@ -155,6 +160,10 @@ textarea, input {
   width: 97%;
   background-color: #ededed;
   border-radius: 3px;
+}
+
+.floating-label.secondary input {
+  background-color: transparent;
 }
 
 .floating-label input:focus, .floating-label input:active {
@@ -173,6 +182,10 @@ textarea, input {
   font-size: 12px;
   transition: margin 0.2s ease, color 0.2s ease, font-size 0.2s ease;
   text-transform: uppercase;
+}
+
+.floating-label.secondary input+label {
+  bottom: 1.2em;
 }
 
 .floating-label input:focus+label, .floating-label input:active+label, .floating-label input:valid+label {
@@ -255,14 +268,14 @@ textarea, input {
   height: 120px;
   width: 100%;
   position: absolute;
-  background: rgba(76,76,76,0.5);
-  background: -moz-linear-gradient(top, rgba(76,76,76,0.5) 0%, rgba(19,19,19,0) 100%);
-  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(76,76,76,0.5)), color-stop(100%, rgba(19,19,19,0)));
-  background: -webkit-linear-gradient(top, rgba(76,76,76,0.5) 0%, rgba(19,19,19,0) 100%);
-  background: -o-linear-gradient(top, rgba(76,76,76,0.5) 0%, rgba(19,19,19,0) 100%);
-  background: -ms-linear-gradient(top, rgba(76,76,76,0.5) 0%, rgba(19,19,19,0) 100%);
-  background: linear-gradient(to bottom, rgba(76,76,76,0.5) 0%, rgba(19,19,19,0) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313', GradientType=0 );  
+  background: rgba(76, 76, 76, 0.5);
+  background: -moz-linear-gradient(top, rgba(76, 76, 76, 0.5) 0%, rgba(19, 19, 19, 0) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(76, 76, 76, 0.5)), color-stop(100%, rgba(19, 19, 19, 0)));
+  background: -webkit-linear-gradient(top, rgba(76, 76, 76, 0.5) 0%, rgba(19, 19, 19, 0) 100%);
+  background: -o-linear-gradient(top, rgba(76, 76, 76, 0.5) 0%, rgba(19, 19, 19, 0) 100%);
+  background: -ms-linear-gradient(top, rgba(76, 76, 76, 0.5) 0%, rgba(19, 19, 19, 0) 100%);
+  background: linear-gradient(to bottom, rgba(76, 76, 76, 0.5) 0%, rgba(19, 19, 19, 0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313', GradientType=0);
 }
 
 .main-content {
@@ -293,6 +306,7 @@ textarea, input {
 }
 
 /* Indeterminate */
+
 .pure-material-progress-circular:indeterminate {
   -webkit-mask-image: linear-gradient(transparent 50%, black 50%), linear-gradient(to right, transparent 50%, black 50%);
   mask-image: linear-gradient(transparent 50%, black 50%), linear-gradient(to right, transparent 50%, black 50%);
@@ -303,8 +317,7 @@ textarea, input {
   animation: none;
 }
 
-.pure-material-progress-circular:indeterminate::before,
-.pure-material-progress-circular:indeterminate::-webkit-progress-value {
+.pure-material-progress-circular:indeterminate::before, .pure-material-progress-circular:indeterminate::-webkit-progress-value {
   content: "";
   display: block;
   box-sizing: border-box;
@@ -335,57 +348,88 @@ textarea, input {
 
 @keyframes pure-material-progress-circular {
   0% {
-      transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   12.5% {
-      transform: rotate(180deg);
-      animation-timing-function: linear;
+    transform: rotate(180deg);
+    animation-timing-function: linear;
   }
   25% {
-      transform: rotate(630deg);
+    transform: rotate(630deg);
   }
   37.5% {
-      transform: rotate(810deg);
-      animation-timing-function: linear;
+    transform: rotate(810deg);
+    animation-timing-function: linear;
   }
   50% {
-      transform: rotate(1260deg);
+    transform: rotate(1260deg);
   }
   62.5% {
-      transform: rotate(1440deg);
-      animation-timing-function: linear;
+    transform: rotate(1440deg);
+    animation-timing-function: linear;
   }
   75% {
-      transform: rotate(1890deg);
+    transform: rotate(1890deg);
   }
   87.5% {
-      transform: rotate(2070deg);
-      animation-timing-function: linear;
+    transform: rotate(2070deg);
+    animation-timing-function: linear;
   }
   100% {
-      transform: rotate(2520deg);
+    transform: rotate(2520deg);
   }
 }
 
 @keyframes pure-material-progress-circular-pseudo {
   0% {
-      transform: rotate(-30deg);
+    transform: rotate(-30deg);
   }
   29.4% {
-      border-left-color: transparent;
+    border-left-color: transparent;
   }
   29.41% {
-      border-left-color: currentColor;
+    border-left-color: currentColor;
   }
   64.7% {
-      border-bottom-color: transparent;
+    border-bottom-color: transparent;
   }
   64.71% {
-      border-bottom-color: currentColor;
+    border-bottom-color: currentColor;
   }
   100% {
-      border-left-color: currentColor;
-      border-bottom-color: currentColor;
-      transform: rotate(225deg);
+    border-left-color: currentColor;
+    border-bottom-color: currentColor;
+    transform: rotate(225deg);
   }
+}
+
+.content-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.auction {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  box-sizing: border-box;
+  padding: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 2px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }

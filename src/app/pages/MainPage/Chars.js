@@ -45,7 +45,7 @@ export default class Chars extends React.Component {
         }
 
         return (
-            <div style={{ display: 'flex', direction: 'column', height: '100%', width: '100%', padding: 16, boxSizing: 'border-box', flexWrap: 'wrap', overflow: 'auto', overflowX: 'hidden' }}>
+            <div className="content-body">
                 {
                     chars.map(char => {
                         return (

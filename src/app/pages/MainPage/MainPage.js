@@ -12,6 +12,7 @@ import bg from './imgs/bg.jpg';
 
 import Home from './Home';
 import Chars from './Chars';
+import Auction from './Auction';
 
 const NavIconButton = ({ img, path }) => {
     return (
@@ -63,7 +64,7 @@ export default class MainPage extends React.Component {
                                 <p>NEWS</p>
                             </Route>
                             <Route path="/main/store">
-                                <p>STORE</p>
+                                <Auction />
                             </Route>
                             <Route path="/main/account">
                                 <Chars />
