@@ -411,12 +411,11 @@ textarea, input {
   padding: 16px;
   box-sizing: border-box;
   flex-wrap: wrap;
-  overflow: auto;
-  overflow-x: hidden;
 }
 
 .auction {
   width: 100%;
+  height: 100%;
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -428,8 +427,30 @@ textarea, input {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
   border-radius: 2px;
+  display: flex;
+  flex-direction: column;
 }
 
 .card:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+/* 4px scroll thumb. 10px margin from right margin */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 14px 14px transparent;
+  border: solid 4px transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 14px 14px #bbbbbe;
+  border: solid 4px transparent;
+  border-radius: 14px;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
 }
