@@ -50,16 +50,11 @@ export default class Auction extends React.Component {
         return (
             <div className="content-body">
                 <div className="auction">
-
-                    {/* <div className="card" style={{ width: '95%', backgroundColor: 'white', marginBottom: 8, display: 'flex', flexDirection: 'column' }}>
-
-                    </div> */}
                     <div className="card" style={{ height: '100%', width: '100%', backgroundColor: 'white' }}>
                         <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
                             <div className="" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
                                 <Input label="Item ID" secondary style={{ marginRight: 16 }} />
                                 <Input label="Item name" secondary style={{ marginRight: 16 }} />
-                                {/* <Input label="Item type" secondary style={{ marginRight: 16 }} /> */}
                                 <Input label="Min. price" secondary style={{ marginRight: 16 }} />
                                 <Input label="Max. price" secondary style={{ marginRight: 16 }} />
                             </div>
