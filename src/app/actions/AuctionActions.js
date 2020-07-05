@@ -11,3 +11,15 @@ export const fetchListings = async () => {
         }
     }
 }
+
+export const bidAuction = async (auctionId) => {
+    const { Authorization } = await axios.defaults.headers.common
+    try {
+        const { data } = await axios.post('auction/buy', { auctionId }, { headers: { Authorization } });
+        return data;
+    } catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message)
+        }
+    }
+}

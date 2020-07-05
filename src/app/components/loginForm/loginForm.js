@@ -56,7 +56,7 @@ export default class LoginForm extends React.Component {
         return (
             <div className={`login-button ${this.isUserInfoValid() ? 'enabled' : 'disabled'}`}
                 onClick={(event) => this.isUserInfoValid() ? this.doLogin(userInfo) : event.preventDefault()}>
-                <img className="login-button-img" src={this.isUserInfoValid() ? icNext : icNextGray} height={24} />
+                <img className="login-button-img" src={this.isUserInfoValid() ? icNext : icNextGray} height={24} alt="" />
             </div>
         )
     }
@@ -79,7 +79,7 @@ export default class LoginForm extends React.Component {
         const { userInfo, setUserInfo } = this.props;
         return (
             <div className="login-form" style={{ paddingTop: 30 }}>
-                <img src={logo} width={100} style={{ marginLeft: 16, marginBottom: 30 }} />
+                <img src={logo} width={100} style={{ marginLeft: 16, marginBottom: 30 }} alt=""/>
                 <h2>Sign in with your bROriginal account</h2>
                 <Input id="username" label="username" type="text" value={userInfo.username} onChange={(event) => setUserInfo({ ...userInfo, username: event.target.value })} />
                 <Input id="password" label="password" type="password" value={userInfo.password} onChange={(event) => setUserInfo({ ...userInfo, password: event.target.value })} />

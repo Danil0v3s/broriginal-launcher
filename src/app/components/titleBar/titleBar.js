@@ -20,7 +20,7 @@ export default function TitleBar() {
         <div>_</div>
       </div>
       <div className="titlebar-btn close" onClick={close}>
-        <img src={icClose} height={16} width={16} />
+        <img src={icClose} height={16} width={16} alt="" />
       </div>
     </div>
   )

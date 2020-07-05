@@ -17,7 +17,7 @@ const style = {
 export default function SettingsButton() {
     return (
         <div style={style}>
-            <img src={icSettings} height={20} width={20} />
+            <img src={icSettings} height={20} width={20} alt=""/>
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import history from '../../components/History';
 import { Router, Switch, Route, Link } from "react-router-dom";
+import { initSocket } from '../../actions/Socket'
 
 import NYANGPORING from './imgs/NYANGPORING.gif';
 import icAccount from './imgs/ic-account.svg';
@@ -18,7 +19,7 @@ const NavIconButton = ({ img, path }) => {
     return (
         <Link to={path}>
             <div className="icon-btn">
-                <img src={img} width={24} className="icon-btn ic" />
+                <img src={img} width={24} className="icon-btn ic" alt=""/>
             </div>
         </Link>
     )
@@ -26,13 +27,11 @@ const NavIconButton = ({ img, path }) => {
 
 export default class MainPage extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
-    componentWillMount() {
+    componentDidMount() {
         if (!this.props.userInfo || !this.props.userInfo.isAuthenticated) {
-            history.replace("/login")
+            history.replace("/")
+        } else {
+            initSocket(this.props.userInfo.token);
         }
     }
 
@@ -44,7 +43,7 @@ export default class MainPage extends React.Component {
                     <div className="backdrop" />
                     <div className="main-nav-bar">
                         <div style={{ display: 'flex', justifyContent: 'center', padding: 8, alignItems: 'center', marginLeft: 8 }}>
-                            <img src={NYANGPORING} height={32} />
+                            <img src={NYANGPORING} height={32} alt=""/>
                             <p style={{ marginLeft: 8, fontWeight: 100, fontSize: 20, fontFamily: 'Fredoka One' }}>JOGAR</p>
                         </div>
                         <div className="main-nav-bar menu">
@@ -64,7 +63,7 @@ export default class MainPage extends React.Component {
                                 <p>NEWS</p>
                             </Route>
                             <Route path="/main/store">
-                                <Auction />
+                                <Auction userInfo={this.props.userInfo} />
                             </Route>
                             <Route path="/main/account">
                                 <Chars />

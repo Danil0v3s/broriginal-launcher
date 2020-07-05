@@ -19,15 +19,15 @@ export default class Chars extends React.Component {
 
     getCharsimUrl(char, sit) {
         let job = 0;
-        if (char.class == 4060) {
+        if (char.class === 4060) {
             job = 5000
-        } else if (char.class == 4061) {
+        } else if (char.class === 4061) {
             job = 5002
-        } else if (char.class == 4062) {
+        } else if (char.class === 4062) {
             job = 5004
-        } else if (char.class == 4063) {
+        } else if (char.class === 4063) {
             job = 5001
-        } else if (char.class == 4064) {
+        } else if (char.class === 4064) {
             job = 5003
         }
 
@@ -54,7 +54,7 @@ export default class Chars extends React.Component {
                                 style={{ width: '25%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box', flexDirection: 'column' }}>
                                 <img
                                     onMouseOver={(event) => this.setState({ hoverOn: char.char_id })}
-                                    src={this.getCharsimUrl(char, hoverOn !== char.char_id)} />
+                                    src={this.getCharsimUrl(char, hoverOn !== char.char_id)} alt=""/>
                                 <div style={{ backgroundColor: 'black', display: hoverOn === char.char_id ? 'flex' : 'none', flexDirection: 'column', flexWrap: 'wrap', width: '100%', color: 'white', boxSizing: 'border-box', padding: 8 }}>
                                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
                                         <p style={{ display: 'unset', margin: 0 }}>Class: </p>

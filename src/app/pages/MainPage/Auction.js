@@ -5,7 +5,8 @@ import icCards from './imgs/card.png'
 import icNoCards from './imgs/no_card.png'
 import Input from '../../components/input/input';
 import moment from 'moment';
-import { fetchListings } from '../../actions/AuctionActions';
+import { fetchListings, bidAuction } from '../../actions/AuctionActions';
+import { subscribeToAuction } from '../../actions/Socket';
 
 export default class Auction extends React.Component {
     constructor(props) {
@@ -18,11 +19,27 @@ export default class Auction extends React.Component {
     }
 
     componentDidMount() {
-        fetchListings().then(res => {
-            this.setState({ listings: res.data })
-        }).catch(ex => {
-            this.setState({ error: ex.message })
+        this.fetchListings();
+        subscribeToAuction((data) => {
+            if (data.action) {
+                switch (data.action) {
+                    case 0xe03: this.parseAuctionBuyResponse(data); break;
+                    case 0xe04: this.parseAuctionRegisterResponse(data); break;
+                    default: break;
+                }
+            }
         });
+    }
+
+    parseAuctionRegisterResponse = ({ data }) => {
+        this.setState({ listings: [data, ...this.state.listings] })
+    }
+
+    parseAuctionBuyResponse = ({ exitCode, data }) => {
+        if (exitCode === 0) {
+            const { listings } = this.state
+            this.setState({ listings: listings.filter(it => it.auction_id !== data.auctionId), itemSelected: undefined }, () => console.log(this.state))
+        }
     }
 
     hasCards(entry) {
@@ -38,7 +55,7 @@ export default class Auction extends React.Component {
                         [entry.card0, entry.card1, entry.card2, entry.card3, entry.card4].filter(card => card instanceof Object).map(card => {
                             return (
                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <img src={`https://static.divine-pride.net/images/items/item/${card.id}.png`} height={24} />
+                                    <img src={`https://static.divine-pride.net/images/items/item/${card.id}.png`} height={24} alt="" />
                                     <span>{card.name}</span>
                                 </div>
                             )
@@ -49,26 +66,37 @@ export default class Auction extends React.Component {
         }
     }
 
-    renderListingsTable() {
-        const cardInfo = entry => <img src={this.hasCards(entry) ? icCards : icNoCards} height={24}/>
+    fetchListings() {
+        fetchListings().then(res => {
+            this.setState({ listings: res.data })
+        }).catch(ex => {
+            this.setState({ error: ex.message })
+        });
+    }
 
+    buyAuction = async (auctionId) => {
+        await bidAuction(auctionId);
+    }
+
+    renderListingsTable() {
+        const cardInfo = entry => <img src={this.hasCards(entry) ? icCards : icNoCards} height={24} alt=""/>
         return this.state.listings.map(entry => {
             return (
                 <div key={entry.auction_id} className="auction-list-item" onClick={() => this.setState({ itemSelected: entry })}>
-                    <img src={`https://www.divine-pride.net/img/items/item/iRO/${entry.nameid}`} height={32} style={{ marginLeft: 16 }} />
+                    <img src={`https://www.divine-pride.net/img/items/item/iRO/${entry.nameid}`} height={32} style={{ marginLeft: 16 }} alt="" />
                     <span style={{ marginLeft: 16 }}>{entry.nameid} - {entry.item_name}</span>
                     <span style={{ marginLeft: 'auto', marginRight: 32 }}>+{entry.refine}</span>
                     <span style={{ marginRight: 32 }}>{entry.slots || 0} Slots</span>
                     <span style={{ marginRight: 32 }}>{cardInfo(entry)}</span>
                     <span style={{ marginRight: 32 }}>{Number(entry.price).toLocaleString()}z</span>
-                    <button style={{ width: 80 }}>Comprar</button>
+                    <button style={{ width: 80 }} onClick={() => this.buyAuction(entry.auction_id)}>Comprar</button>
                 </div>
             )
         })
     }
 
     render() {
-        const { listings, error, itemSelected } = this.state
+        const { listings, itemSelected } = this.state
         return (
             <div className="content-body">
                 <div className="auction">
@@ -84,7 +112,7 @@ export default class Auction extends React.Component {
                             </div>
                             <div className="auction-listing">
                                 {
-                                    listings.length == 0 && "No items available for sale"
+                                    listings.length === 0 && "No items available for sale"
                                 }
                                 {
                                     listings.length > 0 && (
@@ -100,11 +128,11 @@ export default class Auction extends React.Component {
                                 {
                                     itemSelected && (
                                         <>
-                                            <img src={`https://www.divine-pride.net/img/items/collection/iRO/${itemSelected.nameid}`} width={75} style={{ marginLeft: 'auto', marginRight: 'auto' }} />
+                                            <img src={`https://www.divine-pride.net/img/items/collection/iRO/${itemSelected.nameid}`} width={75} style={{ marginLeft: 'auto', marginRight: 'auto' }} alt="" />
                                             <h4 style={{ marginBottom: 8 }}>[{itemSelected.nameid}] {itemSelected.item_name} +{itemSelected.refine}</h4>
                                             <h5 style={{ marginBottom: 8, marginTop: 0 }}>{itemSelected.slots || 0} Slots</h5>
                                             {this.renderCardsDetail(itemSelected)}
-                                            <span style={{ marginTop: 32, display: 'flex', alignContent: 'center' }}><img src={icPrice} style={{ marginRight: 4 }} />{Number(itemSelected.price).toLocaleString()}z</span>
+                                            <span style={{ marginTop: 32, display: 'flex', alignContent: 'center' }}><img src={icPrice} style={{ marginRight: 4 }} alt="" />{Number(itemSelected.price).toLocaleString()}z</span>
                                             <span style={{ marginTop: 'auto', fontSize: 12 }}>Vendas nas últimas 24h: 0</span>
                                             <span style={{ fontSize: 12, marginBottom: 4 }}>Vendido por: {itemSelected.seller_name}</span>
                                             <button onClick={() => this.setState({ itemSelected: undefined })}>Fechar</button>
