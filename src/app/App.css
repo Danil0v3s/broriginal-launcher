@@ -506,3 +506,26 @@ textarea, input {
 ::-webkit-scrollbar-button {
   display: none;
 }
+
+.myButton {
+	background-color:#77b55a;
+	border-radius:4px;
+	border:1px solid #4b8f29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Trebuchet MS;
+	font-size:14px;
+	font-weight:bold;
+	padding:6px 12px;
+	text-decoration:none;
+}
+
+.myButton:hover {
+	background-color:#72ad55;
+}
+
+.myButton:active {
+	position:relative;
+	top:1px;
+}
