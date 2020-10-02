@@ -7,7 +7,7 @@ import Input from '../../components/input/input';
 import moment from 'moment';
 import { fetchListings, bidAuction } from '../../actions/AuctionActions';
 import { subscribeToAuction } from '../../actions/Socket';
-import { connect } from 'socket.io-client';
+import { connect } from 'react-redux';
 
 class Auction extends React.Component {
     constructor(props) {

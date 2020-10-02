@@ -1,7 +1,8 @@
-import { SET_USER_INFO } from "./AuthActionTypes";
+import { CLEAR_AUTH_ERROR, SET_AUTH_ERROR, SET_USER_INFO } from "./AuthActionTypes";
 
 const initialState = {
-    userInfo: undefined
+    userInfo: {},
+    error: undefined
 };
 
 export default function(state = initialState, action) {
@@ -10,6 +11,16 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 userInfo: action.payload.userInfo
+            }
+        case SET_AUTH_ERROR:
+            return {
+                ...state,
+                error: action.payload.error
+            }
+        case CLEAR_AUTH_ERROR:
+            return {
+                ...state,
+                error: undefined
             }
         default:
             return state

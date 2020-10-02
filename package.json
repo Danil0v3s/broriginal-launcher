@@ -71,6 +71,7 @@
     "concurrently": "^5.2.0",
     "electron": "^9.0.1",
     "electron-builder": "^22.7.0",
+    "electron-redux-devtools": "^0.3.4",
     "redux-devtools-extension": "^2.13.8",
     "wait-on": "^5.0.0"
   }

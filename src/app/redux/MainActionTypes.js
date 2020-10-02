@@ -1,0 +1,1 @@
+export const CLEAR_ERRORS = 'main/CLEAR_ERRORS'
