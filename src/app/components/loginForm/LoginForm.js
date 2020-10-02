@@ -24,22 +24,6 @@ class LoginForm extends React.Component {
         // ipcRenderer.on('download-progress', this.asynchronousMessageFromMain)
     }
 
-    // asynchronousMessageFromMain = async (event, arg) => {
-    //     if (!this.unmounted && this.mounted) {
-    //         this.setState({ ...arg })
-    //     }
-    // }
-
-    componentWillUnmount() {
-        this.unmounted = true
-        this.mounted = false
-    }
-
-    componentDidMount() {
-        this.unmounted = false
-        this.mounted = true
-    }
-
     isUserInfoValid = () => {
         const { username, password } = this.state;
 

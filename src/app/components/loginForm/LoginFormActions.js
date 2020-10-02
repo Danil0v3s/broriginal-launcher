@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { CLEAR_AUTH_ERROR, SET_AUTH_ERROR, SET_USER_INFO } from "../../redux/auth/AuthActionTypes";
+import history from '../History'
 
 export function doLogin({ username, password, isAuthenticated = false }) {
     return async dispatch => {
@@ -19,8 +20,9 @@ export function doLogin({ username, password, isAuthenticated = false }) {
             }
             dispatch({
                 type: SET_USER_INFO,
-                payload: userInfo
+                payload: { userInfo }
             });
+            history.push('/main/home');
         } catch (error) {
             if (error.response) {
                 dispatch({

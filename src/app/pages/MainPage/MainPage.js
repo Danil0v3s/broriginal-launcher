@@ -14,18 +14,19 @@ import bg from './imgs/bg.jpg';
 import Home from './Home';
 import Chars from './Chars';
 import Auction from './Auction';
+import { connect } from 'react-redux';
 
 const NavIconButton = ({ img, path }) => {
     return (
         <Link to={path}>
             <div className="icon-btn">
-                <img src={img} width={24} className="icon-btn ic" alt=""/>
+                <img src={img} width={24} className="icon-btn ic" alt="" />
             </div>
         </Link>
     )
 }
 
-export default class MainPage extends React.Component {
+class MainPage extends React.Component {
 
     componentDidMount() {
         if (!this.props.userInfo || !this.props.userInfo.isAuthenticated) {
@@ -43,7 +44,7 @@ export default class MainPage extends React.Component {
                     <div className="backdrop" />
                     <div className="main-nav-bar">
                         <div style={{ display: 'flex', justifyContent: 'center', padding: 8, alignItems: 'center', marginLeft: 8 }}>
-                            <img src={NYANGPORING} height={32} alt=""/>
+                            <img src={NYANGPORING} height={32} alt="" />
                             <p style={{ marginLeft: 8, fontWeight: 100, fontSize: 20, fontFamily: 'Fredoka One' }}>JOGAR</p>
                         </div>
                         <div className="main-nav-bar menu">
@@ -63,7 +64,7 @@ export default class MainPage extends React.Component {
                                 <p>NEWS</p>
                             </Route>
                             <Route path="/main/store">
-                                <Auction userInfo={this.props.userInfo} />
+                                <Auction />
                             </Route>
                             <Route path="/main/account">
                                 <Chars />
@@ -77,5 +78,18 @@ export default class MainPage extends React.Component {
             </Router>
         )
     }
-
 }
+
+const mapStateToProps = ({ auth }) => {
+    return {
+        userInfo: auth.userInfo
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainPage)
