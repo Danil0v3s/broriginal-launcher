@@ -7,24 +7,26 @@ import { login as actionLogin } from '../../actions/AccountActions';
 import icNext from './ic-next.svg'
 import icNextGray from './ic-next-gray.svg'
 import logo from './logo.png'
+import { connect } from 'socket.io-client';
+import { setUserInfo } from './LoginFormActions';
 
 const ipcRenderer = window.require('electron').ipcRenderer
 
-export default class LoginForm extends React.Component {
+class LoginForm extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {}
 
-        ipcRenderer.on('download-progress', this.asynchronousMessageFromMain)
+        // ipcRenderer.on('download-progress', this.asynchronousMessageFromMain)
     }
 
-    asynchronousMessageFromMain = async (event, arg) => {
-        if (!this.unmounted && this.mounted) {
-            this.setState({ ...arg })
-        }
-    }
+    // asynchronousMessageFromMain = async (event, arg) => {
+    //     if (!this.unmounted && this.mounted) {
+    //         this.setState({ ...arg })
+    //     }
+    // }
 
     componentWillUnmount() {
         this.unmounted = true
@@ -37,14 +39,14 @@ export default class LoginForm extends React.Component {
     }
 
     doLogin = async ({ username, password, isAuthenticated }) => {
-        if (username.length >= 4 && password.length >= 4 && !isAuthenticated) {
-            this.setState({ error: undefined })
-            actionLogin(username, password).then(res => {
-                this.props.setUserInfo({ ...this.props.userInfo, isAuthenticated: true, token: res.token, account_id: res.account_id })
-            }).catch(ex => {
-                this.setState({ error: ex.message })
-            });
-        }
+        // if (username.length >= 4 && password.length >= 4 && !isAuthenticated) {
+        //     this.setState({ error: undefined })
+        //     actionLogin(username, password).then(res => {
+        //         this.props.setUserInfo({ ...this.props.userInfo, isAuthenticated: true, token: res.token, account_id: res.account_id })
+        //     }).catch(ex => {
+        //         this.setState({ error: ex.message })
+        //     });
+        // }
     }
 
     isUserInfoValid = () => {
@@ -101,3 +103,11 @@ export default class LoginForm extends React.Component {
         )
     }
 }
+
+
+const mapStateToProps = ({ userInfo }) => ({ userInfo })
+const mapDispatchToProps = dispatch => ({
+    setUserInfo: userInfo => dispatch(setUserInfo(userInfo))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
