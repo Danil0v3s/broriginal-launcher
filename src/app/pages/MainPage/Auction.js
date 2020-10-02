@@ -21,6 +21,7 @@ export default class Auction extends React.Component {
     componentDidMount() {
         this.fetchListings();
         subscribeToAuction((data) => {
+            console.log(data)
             if (data.action) {
                 switch (data.action) {
                     case 0xe03: this.parseAuctionBuyResponse(data); break;
@@ -32,13 +33,20 @@ export default class Auction extends React.Component {
     }
 
     parseAuctionRegisterResponse = ({ data }) => {
-        this.setState({ listings: [data, ...this.state.listings] })
+        const { listings } = this.state
+        this.setState({ listings: [data, ...listings] })
     }
 
     parseAuctionBuyResponse = ({ exitCode, data }) => {
         if (exitCode === 0) {
             const { listings } = this.state
             this.setState({ listings: listings.filter(it => it.auction_id !== data.auctionId), itemSelected: undefined }, () => console.log(this.state))
+        } else if (exitCode === 1) {
+            alert('Você deve estar online com ao menos um personagem para poder comprar')
+        } else if (exitCode === 2) {
+            alert('Você não possui Zeny suficiente com o personagem online')
+        } else if (exitCode === 3) {
+            alert('Oops... Algo deu errado...')
         }
     }
 
@@ -78,8 +86,12 @@ export default class Auction extends React.Component {
         await bidAuction(auctionId);
     }
 
+    removeAuction = async (auctionId) => {
+
+    }
+
     renderListingsTable() {
-        const cardInfo = entry => <img src={this.hasCards(entry) ? icCards : icNoCards} height={24} alt=""/>
+        const cardInfo = entry => <img src={this.hasCards(entry) ? icCards : icNoCards} height={24} alt="" />
         return this.state.listings.map(entry => {
             return (
                 <div key={entry.auction_id} className="auction-list-item" onClick={() => this.setState({ itemSelected: entry })}>
@@ -89,7 +101,12 @@ export default class Auction extends React.Component {
                     <span style={{ marginRight: 32 }}>{entry.slots || 0} Slots</span>
                     <span style={{ marginRight: 32 }}>{cardInfo(entry)}</span>
                     <span style={{ marginRight: 32 }}>{Number(entry.price).toLocaleString()}z</span>
-                    <button style={{ width: 80 }} onClick={() => this.buyAuction(entry.auction_id)}>Comprar</button>
+                    {
+                        entry.account_id !== this.props.userInfo.account_id && <button style={{ width: 80 }} onClick={() => this.buyAuction(entry.auction_id)}>Comprar</button>
+                    }
+                    {
+                        entry.account_id === this.props.userInfo.account_id && <button style={{ width: 80 }} onClick={() => this.removeAuction(entry.auction_id)}>Remover</button>
+                    }
                 </div>
             )
         })

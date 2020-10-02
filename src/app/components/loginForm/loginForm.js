@@ -40,7 +40,7 @@ export default class LoginForm extends React.Component {
         if (username.length >= 4 && password.length >= 4 && !isAuthenticated) {
             this.setState({ error: undefined })
             actionLogin(username, password).then(res => {
-                this.props.setUserInfo({ ...this.props.userInfo, isAuthenticated: true, token: res.token })
+                this.props.setUserInfo({ ...this.props.userInfo, isAuthenticated: true, token: res.token, account_id: res.account_id })
             }).catch(ex => {
                 this.setState({ error: ex.message })
             });
