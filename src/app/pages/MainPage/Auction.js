@@ -7,8 +7,9 @@ import Input from '../../components/input/input';
 import moment from 'moment';
 import { fetchListings, bidAuction } from '../../actions/AuctionActions';
 import { subscribeToAuction } from '../../actions/Socket';
+import { connect } from 'react-redux';
 
-export default class Auction extends React.Component {
+class Auction extends React.Component {
     constructor(props) {
         super(props)
 
@@ -169,3 +170,10 @@ export default class Auction extends React.Component {
         )
     }
 }
+
+const mapStateToProps = ({ listings }) => ({ listings })
+const mapDispatchToProps = dispatch => ({
+    
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auction)

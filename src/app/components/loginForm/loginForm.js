@@ -2,29 +2,33 @@ import React from 'react';
 import Input from '../input/input'
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
-import { login as actionLogin } from '../../actions/AccountActions';
 
 import icNext from './ic-next.svg'
 import icNextGray from './ic-next-gray.svg'
 import logo from './logo.png'
+import { connect } from 'react-redux';
+import { doLogin } from './LoginFormActions';
 
-const ipcRenderer = window.require('electron').ipcRenderer
+// const ipcRenderer = window.require('electron').ipcRenderer
 
-export default class LoginForm extends React.Component {
+class LoginForm extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {}
-
-        ipcRenderer.on('download-progress', this.asynchronousMessageFromMain)
-    }
-
-    asynchronousMessageFromMain = async (event, arg) => {
-        if (!this.unmounted && this.mounted) {
-            this.setState({ ...arg })
+        this.state = {
+            username: '',
+            password: ''
         }
+
+        // ipcRenderer.on('download-progress', this.asynchronousMessageFromMain)
     }
+
+    // asynchronousMessageFromMain = async (event, arg) => {
+    //     if (!this.unmounted && this.mounted) {
+    //         this.setState({ ...arg })
+    //     }
+    // }
 
     componentWillUnmount() {
         this.unmounted = true
@@ -36,26 +40,16 @@ export default class LoginForm extends React.Component {
         this.mounted = true
     }
 
-    doLogin = async ({ username, password, isAuthenticated }) => {
-        if (username.length >= 4 && password.length >= 4 && !isAuthenticated) {
-            this.setState({ error: undefined })
-            actionLogin(username, password).then(res => {
-                this.props.setUserInfo({ ...this.props.userInfo, isAuthenticated: true, token: res.token, account_id: res.account_id })
-            }).catch(ex => {
-                this.setState({ error: ex.message })
-            });
-        }
-    }
-
     isUserInfoValid = () => {
-        return this.props.userInfo.username.length >= 4 && this.props.userInfo.password.length >= 4;
+        const { username, password } = this.state;
+
+        return username && password && username.length >= 4 && password.length >= 4;
     }
 
     renderLoginButton = () => {
-        const { userInfo } = this.props;
         return (
             <div className={`login-button ${this.isUserInfoValid() ? 'enabled' : 'disabled'}`}
-                onClick={(event) => this.isUserInfoValid() ? this.doLogin(userInfo) : event.preventDefault()}>
+                onClick={this.handleLoginClick}>
                 <img className="login-button-img" src={this.isUserInfoValid() ? icNext : icNextGray} height={24} alt="" />
             </div>
         )
@@ -75,19 +69,35 @@ export default class LoginForm extends React.Component {
         }
     }
 
+    handleUsernameChange = event => {
+        this.setState({ ...this.state, username: event.target.value });
+        event.preventDefault();
+    }
+
+    handlePasswordChange = event => {
+        this.setState({ ...this.state, password: event.target.value });
+        event.preventDefault();
+    }
+
+    handleLoginClick = event => {
+        const { username, password } = this.state;
+        this.isUserInfoValid() ? this.props.doLogin({ username, password }) : event.preventDefault();
+    }
+
     render() {
-        const { userInfo, setUserInfo } = this.props;
+        const { username, password } = this.state;
+        const { error } = this.props;
         return (
             <div className="login-form" style={{ paddingTop: 30 }}>
-                <img src={logo} width={100} style={{ marginLeft: 16, marginBottom: 30 }} alt=""/>
+                <img src={logo} width={100} style={{ marginLeft: 16, marginBottom: 30 }} alt="" />
                 <h2>Sign in with your bROriginal account</h2>
-                <Input id="username" label="username" type="text" value={userInfo.username} onChange={(event) => setUserInfo({ ...userInfo, username: event.target.value })} />
-                <Input id="password" label="password" type="password" value={userInfo.password} onChange={(event) => setUserInfo({ ...userInfo, password: event.target.value })} />
+                <Input id="username" label="username" type="text" value={username} onChange={this.handleUsernameChange} />
+                <Input id="password" label="password" type="password" value={password} onChange={this.handlePasswordChange} />
                 {
-                    this.state.error && <p style={{ color: 'red', marginLeft: 30, marginTop: 0, marginBottom: 0, fontSize: 14 }}>{this.state.error}</p>
+                    error && <p style={{ color: 'red', marginLeft: 30, marginTop: 0, marginBottom: 0, fontSize: 14 }}>{error}</p>
                 }
 
-                <div style={{ marginTop: this.state.error ? 15 : 32, width: '100%', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
+                <div style={{ marginTop: error ? 15 : 32, width: '100%', justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
                     {this.renderButton()}
                 </div>
 
@@ -101,3 +111,16 @@ export default class LoginForm extends React.Component {
         )
     }
 }
+
+
+const mapStateToProps = ({ auth }) => {
+    return {
+        userInfo: auth.userInfo,
+        error: auth.error
+    }
+}
+const mapDispatchToProps = dispatch => ({
+    doLogin: userInfo => dispatch(doLogin(userInfo))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
