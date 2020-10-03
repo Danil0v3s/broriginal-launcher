@@ -56,7 +56,7 @@ const mapStateToProps = ({ auth }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    initializeElectronIPCMessaging: dispatch(initializeElectronIPCMessaging())
+    initializeElectronIPCMessaging: () => dispatch(initializeElectronIPCMessaging())
   }
 }
 

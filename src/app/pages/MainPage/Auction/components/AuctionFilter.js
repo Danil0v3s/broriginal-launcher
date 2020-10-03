@@ -1,6 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+
+import Input from '../../../../components/input/input';
+
 class AuctionFilter extends React.Component {
 
     render() {

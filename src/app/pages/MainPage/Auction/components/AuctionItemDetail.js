@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import icPrice from '../../imgs/shop_vend.png'
+
 class AuctionItemDetail extends React.Component {
 
     renderCardsDetail(entry) {

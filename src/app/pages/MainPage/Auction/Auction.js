@@ -1,15 +1,12 @@
 import React from 'react';
 
-import icPrice from './imgs/shop_vend.png'
-import icCards from './imgs/card.png'
-import icNoCards from './imgs/no_card.png'
-import Input from '../../components/input/input';
 import moment from 'moment';
-import { fetchListings, bidAuction } from '../../actions/AuctionActions';
+import { fetchListings } from './AuctionActions';
 import { subscribeToAuction } from '../../../actions/Socket';
 import { connect } from 'react-redux';
 import AuctionListing from './components/AuctionListing';
 import AuctionItemDetail from './components/AuctionItemDetail';
+import AuctionFilter from './components/AuctionFilter';
 
 class Auction extends React.Component {
     constructor(props) {
@@ -67,7 +64,8 @@ class Auction extends React.Component {
 
 const mapStateToProps = ({ listings }) => ({ listings })
 const mapDispatchToProps = dispatch => ({
-    subscribeToAuction: dispatch(subscribeToAuction())
+    subscribeToAuction: () => dispatch(subscribeToAuction()),
+    fetchListings: () => dispatch(fetchListings())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auction)

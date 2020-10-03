@@ -1,10 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import icCards from '../../imgs/card.png'
+import icNoCards from '../../imgs/no_card.png'
+
 class AuctionListing extends React.Component {
 
     buyAuction = async (auctionId) => {
-        await bidAuction(auctionId);
+        // await bidAuction(auctionId);
     }
 
     removeAuction = async (auctionId) => {
@@ -34,6 +37,7 @@ class AuctionListing extends React.Component {
     }
 
     render() {
+        const { listings } = this.props;
         return (
             <div className="auction-listing">
                 {

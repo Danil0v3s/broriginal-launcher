@@ -13,7 +13,7 @@ import bg from './imgs/bg.jpg';
 
 import Home from './Home';
 import Chars from './Chars';
-import Auction from './Auction';
+import Auction from './Auction/Auction';
 import { connect } from 'react-redux';
 
 const NavIconButton = ({ img, path }) => {
