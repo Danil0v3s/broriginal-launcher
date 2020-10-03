@@ -1,1 +1,2 @@
 export const CLEAR_ERRORS = 'main/CLEAR_ERRORS'
+export const SET_DOWNLOAD_STATUS = 'main/SET_DOWNLOAD_STATUS'
