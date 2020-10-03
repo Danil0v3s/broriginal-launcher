@@ -9,8 +9,6 @@ import logo from './logo.png'
 import { connect } from 'react-redux';
 import { doLogin } from './LoginFormActions';
 
-// const ipcRenderer = window.require('electron').ipcRenderer
-
 class LoginForm extends React.Component {
 
     constructor(props) {
@@ -20,8 +18,6 @@ class LoginForm extends React.Component {
             username: '',
             password: ''
         }
-
-        // ipcRenderer.on('download-progress', this.asynchronousMessageFromMain)
     }
 
     isUserInfoValid = () => {
@@ -40,7 +36,7 @@ class LoginForm extends React.Component {
     }
 
     renderButton = () => {
-        const { downloadStatus } = this.state;
+        const { downloadStatus } = this.props;
         if (downloadStatus && downloadStatus.loading && downloadStatus.progress) {
             return <Progress
                 type="circle"
@@ -97,10 +93,11 @@ class LoginForm extends React.Component {
 }
 
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth, main }) => {
     return {
         userInfo: auth.userInfo,
-        error: auth.error
+        error: auth.error,
+        downloadStatus: main.downloadStatus
     }
 }
 const mapDispatchToProps = dispatch => ({

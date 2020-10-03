@@ -7,18 +7,15 @@ import history from './components/History';
 import MainPage from './pages/MainPage/MainPage';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { initializeElectronIPCMessaging } from './service/ElectronService';
 
 axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? process.env.API_URL : 'http://localhost:5131/api/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-const ipcRenderer = window.require('electron').ipcRenderer
-
 class App extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    // ipcRenderer.on('asynchronous-message', this.asynchronousMessageFromMain)
+  componentDidMount() {
+    this.initialize();
   }
 
   componentDidUpdate() {
@@ -26,6 +23,10 @@ class App extends React.Component {
     if (userInfo.token) {
       axios.defaults.headers.common['Authorization'] = userInfo.token;
     }
+  }
+
+  initialize() {
+    this.props.initializeElectronIPCMessaging();
   }
 
   render() {
@@ -53,4 +54,10 @@ const mapStateToProps = ({ auth }) => {
   }
 }
 
-export default connect(mapStateToProps)(App)
+const mapDispatchToProps = dispatch => {
+  return {
+    initializeElectronIPCMessaging: dispatch(initializeElectronIPCMessaging())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
