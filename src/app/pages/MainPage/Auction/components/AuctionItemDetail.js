@@ -1,7 +1,27 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-class AuctionListingItemDetail extends React.Component {
+class AuctionItemDetail extends React.Component {
+
+    renderCardsDetail(entry) {
+        if (this.hasCards(entry)) {
+            return (
+                <>
+                    <h4 style={{ marginBottom: 8, marginTop: 8 }}>Cartas</h4>
+                    {
+                        [entry.card0, entry.card1, entry.card2, entry.card3, entry.card4].filter(card => card instanceof Object).map(card => {
+                            return (
+                                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <img src={`https://static.divine-pride.net/images/items/item/${card.id}.png`} height={24} alt="" />
+                                    <span>{card.name}</span>
+                                </div>
+                            )
+                        })
+                    }
+                </>
+            )
+        }
+    }
 
     render() {
         const { item: itemSelected } = this.props;
@@ -38,4 +58,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuctionListingItemDetail)
+export default connect(mapStateToProps, mapDispatchToProps)(AuctionItemDetail)

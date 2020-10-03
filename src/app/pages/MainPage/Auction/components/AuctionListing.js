@@ -3,6 +3,14 @@ import { connect } from 'react-redux'
 
 class AuctionListing extends React.Component {
 
+    buyAuction = async (auctionId) => {
+        await bidAuction(auctionId);
+    }
+
+    removeAuction = async (auctionId) => {
+
+    }
+
     renderListingsTable() {
         const cardInfo = entry => <img src={this.hasCards(entry) ? icCards : icNoCards} height={24} alt="" />
         return this.state.listings.map(entry => {
