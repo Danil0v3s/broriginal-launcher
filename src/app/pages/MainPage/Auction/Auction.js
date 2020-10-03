@@ -8,6 +8,8 @@ import moment from 'moment';
 import { fetchListings, bidAuction } from '../../actions/AuctionActions';
 import { subscribeToAuction } from '../../actions/Socket';
 import { connect } from 'react-redux';
+import AuctionListing from './components/AuctionListing';
+import AuctionListingItemDetail from './components/AuctionListingItemDetail';
 
 class Auction extends React.Component {
     constructor(props) {
@@ -91,28 +93,6 @@ class Auction extends React.Component {
 
     }
 
-    renderListingsTable() {
-        const cardInfo = entry => <img src={this.hasCards(entry) ? icCards : icNoCards} height={24} alt="" />
-        return this.state.listings.map(entry => {
-            return (
-                <div key={entry.auction_id} className="auction-list-item" onClick={() => this.setState({ itemSelected: entry })}>
-                    <img src={`https://www.divine-pride.net/img/items/item/iRO/${entry.nameid}`} height={32} style={{ marginLeft: 16 }} alt="" />
-                    <span style={{ marginLeft: 16 }}>{entry.nameid} - {entry.item_name}</span>
-                    <span style={{ marginLeft: 'auto', marginRight: 32 }}>+{entry.refine}</span>
-                    <span style={{ marginRight: 32 }}>{entry.slots || 0} Slots</span>
-                    <span style={{ marginRight: 32 }}>{cardInfo(entry)}</span>
-                    <span style={{ marginRight: 32 }}>{Number(entry.price).toLocaleString()}z</span>
-                    {
-                        entry.account_id !== this.props.userInfo.account_id && <button style={{ width: 80 }} onClick={() => this.buyAuction(entry.auction_id)}>Comprar</button>
-                    }
-                    {
-                        entry.account_id === this.props.userInfo.account_id && <button style={{ width: 80 }} onClick={() => this.removeAuction(entry.auction_id)}>Remover</button>
-                    }
-                </div>
-            )
-        })
-    }
-
     render() {
         const { listings, itemSelected } = this.state
         return (
@@ -128,36 +108,8 @@ class Auction extends React.Component {
                                     <Input label="Max. price" secondary style={{ marginRight: 16 }} />
                                 </div>
                             </div>
-                            <div className="auction-listing">
-                                {
-                                    listings.length === 0 && "No items available for sale"
-                                }
-                                {
-                                    listings.length > 0 && (
-                                        <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-                                            {
-                                                this.renderListingsTable()
-                                            }
-                                        </div>
-                                    )
-                                }
-                            </div>
-                            <div className={`auction-info ${itemSelected ? 'active' : ''}`}>
-                                {
-                                    itemSelected && (
-                                        <>
-                                            <img src={`https://www.divine-pride.net/img/items/collection/iRO/${itemSelected.nameid}`} width={75} style={{ marginLeft: 'auto', marginRight: 'auto' }} alt="" />
-                                            <h4 style={{ marginBottom: 8 }}>[{itemSelected.nameid}] {itemSelected.item_name} +{itemSelected.refine}</h4>
-                                            <h5 style={{ marginBottom: 8, marginTop: 0 }}>{itemSelected.slots || 0} Slots</h5>
-                                            {this.renderCardsDetail(itemSelected)}
-                                            <span style={{ marginTop: 32, display: 'flex', alignContent: 'center' }}><img src={icPrice} style={{ marginRight: 4 }} alt="" />{Number(itemSelected.price).toLocaleString()}z</span>
-                                            <span style={{ marginTop: 'auto', fontSize: 12 }}>Vendas nas últimas 24h: 0</span>
-                                            <span style={{ fontSize: 12, marginBottom: 4 }}>Vendido por: {itemSelected.seller_name}</span>
-                                            <button onClick={() => this.setState({ itemSelected: undefined })}>Fechar</button>
-                                        </>
-                                    )
-                                }
-                            </div>
+                            <AuctionListing />
+                            <AuctionListingItemDetail item={itemSelected} />
                         </div>
                         <div className="card-footer">
                             <span>{moment().format('MMMM Do YYYY, h:mm:ss a')}</span>
@@ -173,7 +125,7 @@ class Auction extends React.Component {
 
 const mapStateToProps = ({ listings }) => ({ listings })
 const mapDispatchToProps = dispatch => ({
-    
+
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auction)
