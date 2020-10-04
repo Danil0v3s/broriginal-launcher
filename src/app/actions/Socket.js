@@ -1,4 +1,5 @@
 import io from 'socket.io-client';
+import { ADD_AUCTION_ITEM, REMOVE_AUCTION_ITEM, SET_AUCTION_ERROR } from '../redux/auction/AuctionActionTypes';
 let socket = undefined;
 let interval = undefined;
 let RETRY_INTERVAL = 5000;
@@ -50,22 +51,35 @@ export const subscribeToAuction = () => {
 
 const parseAuctionRegisterResponse = ({ data }) => {
     return dispatch => {
-        const { listings } = this.state
-        this.setState({ listings: [data, ...listings] })
+        dispatch({
+            type: ADD_AUCTION_ITEM,
+            payload: { item: data }
+        })
     }
 }
 
 const parseAuctionBuyResponse = ({ exitCode, data }) => {
     return dispatch => {
         if (exitCode === 0) {
-            const { listings } = this.state
-            this.setState({ listings: listings.filter(it => it.auction_id !== data.auctionId), itemSelected: undefined }, () => console.log(this.state))
+            dispatch({
+                type: REMOVE_AUCTION_ITEM,
+                payload: { auctionId: data.auctionId }
+            })
         } else if (exitCode === 1) {
-            alert('Você deve estar online com ao menos um personagem para poder comprar')
+            dispatch({
+                type: SET_AUCTION_ERROR,
+                payload: { error: 'Você deve estar online com ao menos um personagem para poder comprar' }
+            })
         } else if (exitCode === 2) {
-            alert('Você não possui Zeny suficiente com o personagem online')
+            dispatch({
+                type: SET_AUCTION_ERROR,
+                payload: { error: 'Você não possui Zeny suficiente com o personagem online' }
+            })
         } else if (exitCode === 3) {
-            alert('Oops... Algo deu errado...')
+            dispatch({
+                type: SET_AUCTION_ERROR,
+                payload: { error: 'Oops... Algo deu errado...' }
+            })
         }
     }
 }

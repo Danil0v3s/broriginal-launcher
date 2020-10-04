@@ -14,9 +14,13 @@ class AuctionListing extends React.Component {
 
     }
 
+    hasCards(entry) {
+        return entry.card0 instanceof Object || entry.card1 instanceof Object || entry.card2 instanceof Object || entry.card3 instanceof Object
+    }
+
     renderListingsTable() {
         const cardInfo = entry => <img src={this.hasCards(entry) ? icCards : icNoCards} height={24} alt="" />
-        return this.state.listings.map(entry => {
+        return this.props.listings.map(entry => {
             return (
                 <div key={entry.auction_id} className="auction-list-item" onClick={() => this.setState({ itemSelected: entry })}>
                     <img src={`https://www.divine-pride.net/img/items/item/iRO/${entry.nameid}`} height={32} style={{ marginLeft: 16 }} alt="" />
@@ -26,10 +30,10 @@ class AuctionListing extends React.Component {
                     <span style={{ marginRight: 32 }}>{cardInfo(entry)}</span>
                     <span style={{ marginRight: 32 }}>{Number(entry.price).toLocaleString()}z</span>
                     {
-                        entry.account_id !== this.props.userInfo.account_id && <button style={{ width: 80 }} onClick={() => this.buyAuction(entry.auction_id)}>Comprar</button>
+                        entry.account_id !== this.props.userInfo.accountId && <button style={{ width: 80 }} onClick={() => this.buyAuction(entry.auction_id)}>Comprar</button>
                     }
                     {
-                        entry.account_id === this.props.userInfo.account_id && <button style={{ width: 80 }} onClick={() => this.removeAuction(entry.auction_id)}>Remover</button>
+                        entry.account_id === this.props.userInfo.accountId && <button style={{ width: 80 }} onClick={() => this.removeAuction(entry.auction_id)}>Remover</button>
                     }
                 </div>
             )
@@ -57,9 +61,10 @@ class AuctionListing extends React.Component {
     }
 }
 
-const mapStateToProps = ({ auction }) => {
+const mapStateToProps = ({ auction, auth }) => {
     return {
-        listings: auction.listings
+        listings: auction.listings,
+        userInfo: auth.userInfo
     }
 }
 

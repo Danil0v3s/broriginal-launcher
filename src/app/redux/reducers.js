@@ -1,6 +1,9 @@
 import { combineReducers } from 'redux'
+
 import MarketplaceReducer from './marketplace/MarketplaceReducer'
 import AuthReducer from './auth/AuthReducer'
+import AuctionReducer from './auction/AuctionReducer'
+
 import { CLEAR_ERRORS, SET_DOWNLOAD_STATUS } from './MainActionTypes'
 
 function MainReducer(state = {}, action) {
@@ -23,5 +26,6 @@ function MainReducer(state = {}, action) {
 export default combineReducers({
     marketplace: MarketplaceReducer,
     auth: AuthReducer,
-    main: MainReducer
+    main: MainReducer,
+    auction: AuctionReducer
 })

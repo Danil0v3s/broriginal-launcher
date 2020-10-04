@@ -12,10 +12,7 @@ class Auction extends React.Component {
     constructor(props) {
         super(props)
 
-        this.state = {
-            listings: [],
-            error: undefined
-        }
+        this.state = {}
     }
 
     componentDidMount() {
@@ -23,24 +20,12 @@ class Auction extends React.Component {
     }
 
     initialize() {
-        this.fetchListings();
+        this.props.fetchListings();
         this.props.subscribeToAuction();
     }
 
-    hasCards(entry) {
-        return entry.card0 instanceof Object || entry.card1 instanceof Object || entry.card2 instanceof Object || entry.card3 instanceof Object
-    }
-
-    fetchListings() {
-        fetchListings().then(res => {
-            this.setState({ listings: res.data })
-        }).catch(ex => {
-            this.setState({ error: ex.message })
-        });
-    }
-
     render() {
-        const { listings, itemSelected } = this.state
+        const { itemSelected } = this.state
         return (
             <div className="content-body">
                 <div className="auction">
