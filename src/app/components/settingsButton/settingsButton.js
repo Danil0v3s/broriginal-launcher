@@ -1,6 +1,8 @@
 import React from 'react';
 import icSettings from './ic-settings.svg';
 
+const electron = window.require('electron');
+
 const style = {
     height: 32,
     width: 32,
@@ -16,7 +18,7 @@ const style = {
 
 export default function SettingsButton() {
     return (
-        <div style={style}>
+        <div style={style} onClick={() => electron.remote.getCurrentWindow().openDevTools()}>
             <img src={icSettings} height={20} width={20} alt=""/>
         </div>
     )

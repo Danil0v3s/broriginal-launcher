@@ -2,6 +2,7 @@ Promise = require('bluebird');
 const { app, BrowserWindow, ipcMain } = require('electron');
 
 const path = require('path');
+const os = require('os');
 const url = require('url');
 const isDev = require('electron-is-dev');
 const defaultReq = require('request');
@@ -93,7 +94,7 @@ function createWindow() {
         frame: false,
         resizable: false,
         movable: true,
-        webPreferences: { nodeIntegration: true }
+        webPreferences: { nodeIntegration: true, enableRemoteModule: true }
     });
 
     // and load the index.html of the app.
@@ -106,9 +107,9 @@ function createWindow() {
     mainWindow.loadURL(startUrl);
 
     // Open the DevTools.
-    if (isDev) {
-        mainWindow.webContents.openDevTools();
-    }
+    // if (isDev) {
+    //     mainWindow.webContents.openDevTools();
+    // }
 
     mainWindow.removeMenu();
     mainWindow.webContents.once('did-finish-load', () => {
@@ -126,6 +127,8 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null
     })
+
+    mainWindow.webContents.session.loadExtension("C:\\Users\\danil\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\lmhkpmbekcpmknklioeibfkpmmfibljd\\2.17.0_0")
 }
 
 // This method will be called when Electron has finished
