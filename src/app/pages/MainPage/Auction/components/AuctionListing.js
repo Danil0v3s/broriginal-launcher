@@ -3,12 +3,9 @@ import { connect } from 'react-redux'
 
 import icCards from '../../imgs/card.png'
 import icNoCards from '../../imgs/no_card.png'
+import { bidAuction } from '../AuctionActions'
 
 class AuctionListing extends React.Component {
-
-    buyAuction = async (auctionId) => {
-        // await bidAuction(auctionId);
-    }
 
     removeAuction = async (auctionId) => {
 
@@ -30,7 +27,7 @@ class AuctionListing extends React.Component {
                     <span style={{ marginRight: 32 }}>{cardInfo(entry)}</span>
                     <span style={{ marginRight: 32 }}>{Number(entry.price).toLocaleString()}z</span>
                     {
-                        entry.account_id !== this.props.userInfo.accountId && <button style={{ width: 80 }} onClick={() => this.buyAuction(entry.auction_id)}>Comprar</button>
+                        entry.account_id !== this.props.userInfo.accountId && <button style={{ width: 80 }} onClick={() => this.props.buyAuction(entry.auction_id)}>Comprar</button>
                     }
                     {
                         entry.account_id === this.props.userInfo.accountId && <button style={{ width: 80 }} onClick={() => this.removeAuction(entry.auction_id)}>Remover</button>
@@ -70,7 +67,7 @@ const mapStateToProps = ({ auction, auth }) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-
+        buyAuction: auctionId => dispatch(bidAuction(auctionId))
     }
 }
 
